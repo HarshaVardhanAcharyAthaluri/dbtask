@@ -6,9 +6,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.hibernate.mapping.Subclass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tasktwo.dbtask.annotation.LogMethodParam;
 import com.tasktwo.dbtask.dto.SubClasses;
 import com.tasktwo.dbtask.dto.UserDeatailInfo;
 import com.tasktwo.dbtask.model.UserDetails;
@@ -17,14 +20,18 @@ import com.tasktwo.dbtask.repository.UserDetailsRepository;
 @Service
 public class UserDetailsService {
 
+	private static final Logger log = LoggerFactory.getLogger(UserDetailsService.class);
 	@Autowired
 	UserDetailsRepository userRepo;
 	
+	@LogMethodParam
 	public UserDetails getuserDetailById(Long userId) {
+		log.info("{}","get user by id "+userId);
 		return userRepo.findById(userId).orElseThrow(()->new RuntimeException("no User Present with "+userId));
 	}
 	
 	public List<UserDeatailInfo> getUserDetails(){
+		log.info("{}","getting all users in service");
 		List<UserDeatailInfo> detailslist = new ArrayList<UserDeatailInfo>();
 		
 		List<UserDetails> useinfolist = (List<UserDetails>) userRepo.findAll();
